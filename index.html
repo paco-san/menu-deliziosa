@@ -1115,28 +1115,22 @@ buildMenu();
 <script>
 (function() {
   const MIN = 14, MAX = 32, STEP = 2;
-  const storageKey = 'deliziosa_fontsize';
-
-  function getBase() {
-    return parseInt(localStorage.getItem(storageKey)) || parseInt(getComputedStyle(document.body).fontSize);
-  }
+  let currentSize = parseInt(getComputedStyle(document.body).fontSize) || 21;
 
   function applySize(size) {
-    size = Math.min(MAX, Math.max(MIN, size));
-    document.body.style.fontSize = size + 'px';
-    localStorage.setItem(storageKey, size);
+    currentSize = Math.min(MAX, Math.max(MIN, size));
+    document.body.style.setProperty('font-size', currentSize + 'px', 'important');
+    try { localStorage.setItem('deliziosa_fontsize', currentSize); } catch(e) {}
   }
 
-  // Applica al caricamento se salvato
-  const saved = localStorage.getItem(storageKey);
-  if (saved) document.body.style.fontSize = saved + 'px';
+  // Ripristina preferenza salvata se disponibile
+  try {
+    const saved = parseInt(localStorage.getItem('deliziosa_fontsize'));
+    if (saved >= MIN && saved <= MAX) applySize(saved);
+  } catch(e) {}
 
-  document.getElementById('fontUp').addEventListener('click', function() {
-    applySize(getBase() + STEP);
-  });
-  document.getElementById('fontDown').addEventListener('click', function() {
-    applySize(getBase() - STEP);
-  });
+  document.getElementById('fontUp').onclick = function() { applySize(currentSize + STEP); };
+  document.getElementById('fontDown').onclick = function() { applySize(currentSize - STEP); };
 })();
 </script>
 </body>
