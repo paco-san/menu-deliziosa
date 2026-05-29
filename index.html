@@ -24,8 +24,7 @@
     background: var(--bg);
     color: var(--ink);
     font-family: 'Lora', Georgia, serif;
-    font-size: 19px;
-    line-height: 1.6;
+    font-size: 21px;
   }
 
   /* HERO */
@@ -95,6 +94,7 @@
     width: 100%;
   }
   .section.alt-bg { background: var(--bg-off); }
+  .section.dessert-bg { background: #FFFBEA; }
 
   .section-header { text-align: center; margin-bottom: 28px; }
   .section-header h2 {
@@ -425,14 +425,14 @@
   }
   @media (min-width: 640px) {
     .section { padding: 56px 32px 48px; }
-    body { font-size: 19px; }
+    body { font-size: 21px; }
   }
   @media (min-width: 768px) {
-    body { font-size: 20px; }
+    body { font-size: 22px; }
     .section { padding: 60px 40px 52px; }
   }
   @media (min-width: 1024px) {
-    body { font-size: 21px; }
+    body { font-size: 23px; }
     .section { padding: 64px 48px 56px; }
   }
 </style>
@@ -807,7 +807,7 @@ function buildMenu() {
     }
     first = false;
     const sec = document.createElement('section');
-    sec.className = 'section' + (idx % 2 !== 0 ? ' alt-bg' : '');
+    sec.className = 'section' + (idx % 2 !== 0 ? ' alt-bg' : '') + (s.id === 'dessert' ? ' dessert-bg' : '');
     sec.id = s.id;
     // Rendering speciale per sezione allergeni
     if (s.id === 'chisiamo') {
