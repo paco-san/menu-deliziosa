@@ -413,6 +413,33 @@
     font-size: .9rem; font-weight: 700; font-style: italic;
     text-transform: none; letter-spacing: .05em; margin-bottom: 5px;
   }
+  .font-controls {
+    display: inline-flex; align-items: center; gap: 10px;
+    margin: 14px auto 0;
+    background: rgba(255,255,255,.12);
+    border-radius: 30px;
+    padding: 6px 14px;
+  }
+  .font-controls span {
+    font-size: .65rem; letter-spacing: .12em;
+    color: rgba(255,255,255,.7);
+    text-transform: uppercase;
+  }
+  .font-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,.4);
+    background: rgba(255,255,255,.15);
+    color: #fff;
+    font-size: 1.2rem; line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+    font-family: 'Josefin Sans', sans-serif;
+    letter-spacing: 0; text-transform: none;
+  }
+  .font-btn:hover { background: rgba(255,255,255,.3); }
+  .font-btn:active { background: rgba(255,255,255,.45); }
 
   .observe-target {
     display: block; position: relative;
@@ -454,6 +481,11 @@
   <strong>La Deliziosa</strong>
   Lun – Sab &nbsp;·&nbsp; 19:00 – 00:00 &nbsp;·&nbsp; <a href="tel:0425484031" style="color:inherit;text-decoration:none">0425 484031</a><br>
   <span style="opacity:.6">Questo sito non raccoglie dati personali e non utilizza cookie di profilazione.</span><br>
+  <div class="font-controls">
+    <button class="font-btn" id="fontDown" aria-label="Riduci testo">−</button>
+    <span>Testo</span>
+    <button class="font-btn" id="fontUp" aria-label="Ingrandisci testo">+</button>
+  </div><br>
   <span style="opacity:.4;font-size:.6rem">v.27</span>
 </footer>
 
@@ -1077,6 +1109,34 @@ buildMenu();
     currentVersion = await getVersion();
     setInterval(checkForUpdate, 60000);
   }, 5000);
+})();
+</script>
+<!-- Font size controls -->
+<script>
+(function() {
+  const MIN = 14, MAX = 32, STEP = 2;
+  const storageKey = 'deliziosa_fontsize';
+
+  function getBase() {
+    return parseInt(localStorage.getItem(storageKey)) || parseInt(getComputedStyle(document.body).fontSize);
+  }
+
+  function applySize(size) {
+    size = Math.min(MAX, Math.max(MIN, size));
+    document.body.style.fontSize = size + 'px';
+    localStorage.setItem(storageKey, size);
+  }
+
+  // Applica al caricamento se salvato
+  const saved = localStorage.getItem(storageKey);
+  if (saved) document.body.style.fontSize = saved + 'px';
+
+  document.getElementById('fontUp').addEventListener('click', function() {
+    applySize(getBase() + STEP);
+  });
+  document.getElementById('fontDown').addEventListener('click', function() {
+    applySize(getBase() - STEP);
+  });
 })();
 </script>
 </body>
