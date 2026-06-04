@@ -127,7 +127,7 @@
   .menu-item:last-child { border-bottom: none; }
   .item-info { flex: 1; min-width: 0; }
   .item-name-row {
-    display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap;
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
   }
   .item-name {
     font-family: 'Playfair Display', serif;
@@ -135,9 +135,9 @@
   }
   .badge {
     font-family: 'Josefin Sans', sans-serif;
-    font-size: .58rem; letter-spacing: .08em; font-weight: 600;
-    padding: 2px 6px; border-radius: 20px;
-    text-transform: uppercase; flex-shrink: 0; line-height: 1.6;
+    font-size: .5rem; letter-spacing: .07em; font-weight: 600;
+    padding: 1px 5px; border-radius: 20px;
+    text-transform: uppercase; flex-shrink: 0; line-height: 1.5;
   }
   .badge-new   { background: #FFF3D0; color: #7A5200; border: 1px solid #D4A840; }
   .badge-spicy { background: #FFEDED; color: #A01010; border: 1px solid #E08080; }
@@ -712,12 +712,12 @@ const MENU_DATA = [
   ["Dessert","Tiramisù Classico","Al cucchiaio, in vetro","6.00","","1,3,7"],
   ["Dessert","Mascarpone, Brownie, Cremoso alla Gianduja","Nocciole Km 0 · al cucchiaio, in vetro","6.00","","3,7,8"],
   ["Dessert","— GELATI E SORBETTI —","Di nostra produzione · al cucchiaio","","",""],
-  ["Dessert","Gelato al Fiordilatte e Fragole fresche","","6.00","","7"],
+  ["Dessert","Gelato al Fiordilatte e Ciliegie Km 0","","6.00","","7"],
   ["Dessert","Gelato al Pistacchio","","5.50","","7,8"],
   ["Dessert","Gelato alla Liquirizia","","5.50","","7"],
   ["Dessert","Gelato alle Arachidi e Caramello Salato","","5.50","","5,7"],
   ["Dessert","Sorbetto Limone e Salvia","Vegano","4.50","",""],
-  ["Dessert","Sorbetto alla Pesca","Realizzato con Pesche Km 0 (Orto al Chiosco) · Vegano","4.50","",""],
+  ["Dessert","Sorbetto all'Albicocca","Realizzato con Albicocche Km 0 (Orto al Chiosco) · Vegano","4.50","",""],
   ["Dessert","Sorbetto Cioccolato e Rum","Vegano","4.50","",""],
   ["Dessert","— VINI DA DESSERT AL CALICE —","","","",""],
   ["Dessert","Grecale – Florio","","4.00","",""],
@@ -1027,7 +1027,7 @@ function buildMenu() {
             <div style="text-align:right">
               <div class="item-price">${formatPrice(item.prezzo)}</div>
               ${item.allergeni ? `<span class="allergeni-text">(${item.allergeni})</span>` : ''}
-              ${/\brsg\b/.test(item.badge) ? '<span class="badge badge-rsg" style="font-size:.75rem;padding:2px 6px;margin-top:4px;display:inline-block">🌾</span>' : ''}
+              ${/\brsg\b/.test(item.badge) ? '<span class="badge badge-rsg" style="font-size:.55rem;padding:1px 4px;margin-top:3px;display:inline-block;line-height:1.4">🌾</span>' : ''}
             </div>
           </div>`;
         }).join('')}
