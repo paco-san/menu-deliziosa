@@ -464,6 +464,20 @@
     .section { padding: 64px 48px 56px; }
   }
   /* Google Translate */
+  .wine-calice {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: .62rem; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--orange-dark); opacity: .85; margin-top: 3px; display: block;
+  }
+  .subsection-major {
+    text-align: center; margin: 28px 0 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; font-style: italic;
+    color: var(--orange-dark); letter-spacing: .06em;
+    padding: 10px 0;
+    border-top: 1.5px solid var(--orange-line);
+    border-bottom: 1.5px solid var(--orange-line);
+  }
   .goog-te-banner-frame, .goog-te-banner { display: none !important; }
   body { top: 0 !important; }
   #google_translate_element select {
@@ -536,7 +550,8 @@ const SECTIONS = [
   { id: 'classiche', label: '🍕 Tradizionali', title: 'Pizze <em>Tradizionali</em>',         sub: 'La tradizione della pizza italiana',                      nota: NOTA_PIZZA },
   { id: 'fritti',    label: '🍟 Fritti',        title: 'Fritti e <em>Cucina</em>',            sub: 'Fritture in olio alto oleico · <strong>La cucina chiude alle 22:00</strong>' },
   { id: 'cucina',    label: '🍽️ Cucina',       title: 'Dalla <em>Cucina</em>',               sub: 'Antipasti, insalatone e primi piatti · <strong>La cucina chiude alle 22:00</strong>' },
-  { id: 'bevande',   label: '🥤 Bevande',      title: '<em>Bevande</em>',                    sub: 'Birre artigianali, vini e bibite' },
+  { id: 'bevande',   label: '🥤 Bevande',      title: '<em>Bevande</em>',                    sub: 'Birre artigianali e bibite' },
+  { id: 'vino',      label: '🍷 Vino',          title: '<em>Vino</em>',                       sub: 'Mescita e Carta Vini' },
   { id: 'dessert',   label: '🍮 Dessert',      title: 'I <em>Dessert</em>',                  sub: 'Tutti fatti in casa con passione' },
   { id: 'grappe',    label: '🥃 Distillati',       title: '<em>Distillati</em> e Liquori', sub: 'La nostra selezione' },
   { id: 'chisiamo',  label: '👥 Chi Siamo',   title: 'Lo staff della <em>Deliziosa</em>', sub: 'Le persone che rendono tutto possibile ogni sera' },
@@ -552,6 +567,7 @@ const SECTION_MAP = {
   'fritti':                  'fritti',
   'cucina':                  'cucina',
   'bevande':                 'bevande',
+  'vino':                    'vino',
   'dessert':                 'dessert',
   'grappe distillati liquori': 'grappe',
   'chi siamo':                 'chisiamo',
@@ -724,10 +740,6 @@ const MENU_DATA = [
   ["Bevande","Thè al Limone 33cl","","3.00","",""],
   ["Bevande","Thè alla Pesca 33cl","","3.00","",""],
   ["Bevande","— VINI ALLA MESCITA —","","","",""],
-  ["Bevande","Prosecco DOC Spumante","Extra Dry · Valdobbiadene · 11,0% vol. | Formati | 0,25L (5€) · 0,5L (9€) · 0,75L (15€)","","",""],
-  ["Bevande","Pinot Bianco DOC","Casa Defrà · Colli Berici · 12,0% vol. | Formati | 0,25L (3,5€) · 0,5L (7€) · 1L (13€)","","",""],
-  ["Bevande","Cabernet Sauvignon DOC","12,0% vol. | Formati | 0,25L (3,5€) · 0,5L (7€) · 1L (13€)","","",""],
-  ["Bevande","Valpolicella DOC","Poesie · Cantina di Soave · 11,5% vol. | Formati | 0,25L (4,5€) · 0,5L (9€) · 1L (16€)","","",""],
   ["Dessert","— DOLCI AL PIATTO E AL CUCCHIAIO —","Tutti fatti in casa con passione, da materie prime di qualità<br>Per ogni necessità (senza glutine, senza lattosio/latte, vegan) chiedete allo staff, vi sapremo proporre soluzioni adeguate","","",""],
   ["Dessert","Millefoglie, Chantilly Italiana, Caramello e Nocciole Km 0","","7.00","","1,3,7,8"],
   ["Dessert","Cheesecake Basque con Ciliegie Km 0","Disponibile anche al Caramello Salato · cremosa, al forno, senza biscotto","7.00","","3,7"],
@@ -747,6 +759,34 @@ const MENU_DATA = [
   ["Dessert","Grecale – Florio","","4.00","",""],
   ["Dessert","Dindarello – Maculan","","5.00","",""],
   ["Dessert","Sherry Pedro Ximenez – Williams & Humberts","","5.00","",""],
+  ["Vino","— VINO IN MESCITA —","","","",""],
+  ["Vino","Prosecco DOC Spumante","Extra Dry · Valdobbiadene · 11,0% vol. | Formati | 0,25L (5€) · 0,5L (9€) · 0,75L (15€)","","",""],
+  ["Vino","Pinot Bianco DOC","Casa Defrà · Colli Berici · 12,0% vol. | Formati | 0,25L (3,5€) · 0,5L (7€) · 1L (13€)","","",""],
+  ["Vino","Cabernet Sauvignon DOC","12,0% vol. | Formati | 0,25L (3,5€) · 0,5L (7€) · 1L (13€)","","",""],
+  ["Vino","Valpolicella DOC","Poesie · Cantina di Soave · 11,5% vol. | Formati | 0,25L (4,5€) · 0,5L (9€) · 1L (16€)","","",""],
+  ["Vino","══ CARTA VINI ══","","","",""],
+  ["Vino","— BOLLICINE —","","","",""],
+  ["Vino","Jeio Brut · Bisol","Prosecco Superiore DOCG · Valdobbiadene · Glera · Biologico · 11,5%","18.00","",""],
+  ["Vino","Jeio Extra Dry · Bisol","Prosecco Superiore DOCG · Valdobbiadene · Glera · Biologico · 11,5%","18.00","",""],
+  ["Vino","Franciacorta Brut · Contadi Castaldi","Franciacorta DOCG · Lombardia · Chardonnay, Pinot Nero e Bianco · Biologico","35.00","",""],
+  ["Vino","Franciacorta Satèn · Castel Faglia","Franciacorta DOCG · Lombardia · Chardonnay · Metodo Classico","35.00","",""],
+  ["Vino","— BIANCHI —","","","",""],
+  ["Vino","Renosu Bianco · Tenute Dettori","Vermentino e Moscato di Sennori · Sardegna · Biodinamico · Non filtrato · Zero solfiti aggiunti | 5,50€","25.00","",""],
+  ["Vino","SP68 Bianco · Arianna Occhipinti","Albanello e Zibibbo · Sicilia · Biologico e biodinamico · Non filtrato | 6€","28.00","",""],
+  ["Vino","Greco Bianco · L'Archetipo","Greco Bianco · Puglia · Agricoltura sinergica · Lieviti indigeni · Non filtrato | 5€","22.00","",""],
+  ["Vino","Settenani · Tenuta Fornace","Riesling · Oltrepò Pavese · Biologico BioVegan · Zero solfiti aggiunti | 5,50€","24.50","",""],
+  ["Vino","Drago Bianco · Musella","Garganega · Verona · Biodinamico certificato · Affinamento in sfere di Pietra Rosa di Lessinia | 7€","33.50","",""],
+  ["Vino","Riesling · Les Vins Pirouettes","Riesling · Alsazia · Vino naturale · Triple A | 7€","33.00","",""],
+  ["Vino","Sauvignon Vert · Movia","Friulano (Sauvignon Vert) · Collio Sloveno · Vino naturale · Agricoltura biologica | 6€","28.00","",""],
+  ["Vino","Ribolla Etichetta Bianca · Movia","Ribolla Gialla · Collio Sloveno · Orange wine · Vigne 45 anni · Senza solfiti aggiunti | 6€","28.00","",""],
+  ["Vino","— ROSSI —","","","",""],
+  ["Vino","Renosu Rosso · Tenute Dettori","Cannonau, Monica e Pascale · Sardegna · Biodinamico · Non filtrato · Zero solfiti aggiunti | 5,50€","25.00","",""],
+  ["Vino","SP68 Rosso · Arianna Occhipinti","Frappato e Nero d'Avola · Sicilia · Biologico e biodinamico · Non filtrato | 6€","28.00","",""],
+  ["Vino","Valpolicella Classico · Musella","Corvina, Corvinone, Rondinella · Verona · Biodinamico certificato · Fermentazione spontanea | 6,50€","29.00","",""],
+  ["Vino","Costadilà Rosso","Uve rosse autoctone · Colli Trevigiani · Biologico · Lieviti indigeni · Non filtrato | 4,50€","18.50","",""],
+  ["Vino","Donesco · Pacina","Sangiovese · Toscana · Biologico · Triple A · Non filtrato | 5€","23.00","",""],
+  ["Vino","Primitivo Aglianico · L'Archetipo","Primitivo e Aglianico · Puglia · Agricoltura sinergica · Lieviti indigeni · Non filtrato | 6€","26.50","",""],
+  ["Vino","Petit Ours Brun · Domaine du Coulet","Syrah · Côtes du Rhône · Biologico e biodinamico · Fermentazione spontanea | 7,50€","35.00","",""],
   ["Grappe Distillati Liquori","— GRAPPE BIANCHE —","","","",""],
   ["Grappe Distillati Liquori","J. Poli – Morbida","Moscato Fior d'Arancio e Bianco","3.50","",""],
   ["Grappe Distillati Liquori","J. Poli – Secca","Merlot","3.50","",""],
@@ -1015,6 +1055,9 @@ function buildMenu() {
       ${s.nota ? `<div class="nota-banner">${s.nota}</div>` : ''}
       <div class="item-list">
         ${list.map(item => {
+          if (item.nome.startsWith('══')) {
+            return `<div class="subsection-major">${item.nome.replace(/═/g,'').trim()}</div>`;
+          }
           if (item.nome.startsWith('—') && item.nome.endsWith('—')) {
             return `<div class="subsection-title">${item.nome.replace(/—/g,'').trim()}${item.ingredienti ? '<span>' + item.ingredienti + '</span>' : ''}</div>`;
           }
@@ -1022,6 +1065,11 @@ function buildMenu() {
             || (typeof ESTENSE_LOGOS !== 'undefined' && ESTENSE_LOGOS[item.nome])
             || null;
           const logo = _logoSrc ? `<img class="beer-logo" src="${_logoSrc}" alt="${item.nome}">` : '';
+          // Detect calice price: single pipe, right side is a price (e.g. "5,50€")
+          const wineParts = item.ingredienti ? item.ingredienti.split('|') : [];
+          const isWineCalice = wineParts.length === 2 && /^[\s\d,\.]+€$/.test(wineParts[1].trim());
+          const wineDesc = isWineCalice ? wineParts[0].trim() : null;
+          const calicePrice = isWineCalice ? wineParts[1].trim() : null;
           return `
           <div class="menu-item${logo ? ' has-logo' : ''}">
             ${logo}
@@ -1030,8 +1078,9 @@ function buildMenu() {
                 <span class="item-name">${item.nome}</span>
                 ${badgeHTML(item.badge.replace(/\brsg\b/g, '').trim())}
               </div>
-              ${item.ingredienti ? (() => {
-                const parts = item.ingredienti.split('|');
+              ${(isWineCalice ? wineDesc : item.ingredienti) ? (() => {
+                const src = isWineCalice ? wineDesc : item.ingredienti;
+                const parts = src.split('|');
                 const desc = parts[0].trim();
                 const chipsLabel = parts[1] ? parts[1].trim() : 'Disponibile in';
                 const stese = parts[2] ? parts[2].trim().split('·').map(s => s.trim()).filter(Boolean) : [];
@@ -1050,6 +1099,7 @@ function buildMenu() {
             </div>
             <div style="text-align:right">
               <div class="item-price">${formatPrice(item.prezzo)}</div>
+              ${calicePrice ? `<span class="wine-calice">al calice ${calicePrice}</span>` : ''}
               ${item.allergeni ? `<span class="allergeni-text">(${item.allergeni})</span>` : ''}
               ${/\brsg\b/.test(item.badge) ? '<span class="badge badge-rsg" style="font-size:.55rem;padding:1px 4px;margin-top:3px;display:inline-block;line-height:1.4">🌾</span>' : ''}
             </div>
