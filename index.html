@@ -508,16 +508,19 @@
   <strong>La Deliziosa</strong>
   Lun – Sab &nbsp;·&nbsp; 19:00 – 00:00 &nbsp;·&nbsp; <a href="tel:0425484031" style="color:inherit;text-decoration:none">0425 484031</a><br>
   <span style="opacity:.6">Questo sito non raccoglie dati personali e non utilizza cookie di profilazione.</span><br>
-  <div class="font-controls" style="margin-top:10px">
-    <button class="font-btn" id="translateToggle" aria-label="Traduci">🌐</button>
-    <span>Traduci</span>
+  <div style="display:flex; justify-content:center; gap:12px; margin-top:14px; flex-wrap:wrap;">
+    <div class="font-controls">
+      <button class="font-btn" id="fontDown" aria-label="Riduci testo" type="button">−</button>
+      <span>Testo</span>
+      <button class="font-btn" id="fontUp" aria-label="Ingrandisci testo" type="button">+</button>
+    </div>
+    <div class="font-controls">
+      <button class="font-btn" id="translateToggle" aria-label="Traduci" type="button">🌐</button>
+      <span>Traduci</span>
+    </div>
   </div>
   <div id="translateBox" style="display:none; margin-top:10px;">
     <div id="google_translate_element"></div>
-  </div>
-    <button class="font-btn" id="fontDown" aria-label="Riduci testo">−</button>
-    <span>Testo</span>
-    <button class="font-btn" id="fontUp" aria-label="Ingrandisci testo">+</button>
   </div><br>
   <span style="opacity:.4;font-size:.6rem">v.27</span>
 </footer>
@@ -1168,8 +1171,16 @@ buildMenu();
     if (saved >= MIN && saved <= MAX) applySize(saved);
   } catch(e) {}
 
-  document.getElementById('fontUp').onclick = function() { applySize(getBase() + STEP); };
-  document.getElementById('fontDown').onclick = function() { applySize(getBase() - STEP); };
+  document.getElementById('fontUp').onclick = function() {
+    const y = window.scrollY;
+    applySize(getBase() + STEP);
+    requestAnimationFrame(() => window.scrollTo(0, y));
+  };
+  document.getElementById('fontDown').onclick = function() {
+    const y = window.scrollY;
+    applySize(getBase() - STEP);
+    requestAnimationFrame(() => window.scrollTo(0, y));
+  };
 })();
 </script>
 <!-- Google Translate -->
