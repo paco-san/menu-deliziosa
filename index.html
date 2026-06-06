@@ -615,8 +615,8 @@ const STESE_ICONS = {
 };
 const MENU_DATA = [
   ["Impasti e Farine","— SCEGLI IL TUO IMPASTO —","","","",""],
-  ["Impasti e Farine","Impasto Classico","Molino Dallagiovanna · Farina Uniqua® · Grano tenero tipo 1 con Germe Vitale 100% Italiano · L'originale dal 1987, in costante miglioramento | Stese disponibili | Tradizionale (sottile) · Baby (-1€) · Baby Tirata · Battuta (+4€)","","",""],
-  ["Impasti e Farine","Impasto Alto","Molino Caputo · Farina Super Nuvola® · alta idratazione (60%) · profilo più spesso e soffice | Stese disponibili | Pasta Alta (+1,5€) · Pasta Alta Battuta (+4€)","","",""],
+  ["Impasti e Farine","Impasto Classico","Molino Dallagiovanna · Farina Uniqua® · Grano tenero tipo 1 con Germe Vitale 100% Italiano · L'originale dal 1987, in costante miglioramento | Stese disponibili | Tradizionale (sottile) · Baby (-1€) · Baby Tirata · Battuta – Non disponibile il Sabato (+4€)","","",""],
+  ["Impasti e Farine","Impasto Alto","Molino Caputo · Farina Super Nuvola® · alta idratazione (60%) · profilo più spesso e soffice | Stese disponibili | Pasta Alta (+1,5€) · Pasta Alta Battuta – Non disponibile il Sabato (+4€)","","",""],
   ["Impasti e Farine","Impasto Integrale","Molino Quaglia · Petra® 9 · Alta idratazione (60%) · alto contenuto di fibre | Stese disponibili | Integrale Tradizionale (sottile) (+1,5€) · Integrale Baby","","",""],
   ["Impasti e Farine","Senza Glutine","Base artigianale prodotta esternamente · riservata a clientela con allergia/intolleranza al glutine · pizze con ingredienti compatibili segnate con 🌾 · ci impegniamo a mantenere la selezione degli ingredienti compatibili, ma in alcuni momenti potrebbero comunque non essere disponibili","+3,50 €","",""],
   ["Pizze in Evidenza","Greenbriè","Mozzarella Km 0 · Crema di Zucchine Km 0 · Spek in cottura · Brié","11.00","","1,7,9,12"],
@@ -1043,9 +1043,10 @@ function buildMenu() {
           const match2 = sv.match(/^(.*?)\s*(\([+-]?[^)]+€[^)]*\)|[+-][0-9,.€]+|\([0-9,.€]+\))$/);
           const nomePuro = match2 ? match2[1].trim() : sv.trim();
           const prezzo   = match2 ? match2[2] : '';
+          const nomeBase = nomePuro.split('–')[0].trim();
           const iconFilter = isIntegrale ? 'filter:contrast(1.4) saturate(0.75) brightness(0.92);' : '';
-          const icon = typeof STESE_ICONS !== 'undefined' && STESE_ICONS[nomePuro]
-            ? '<img src="' + STESE_ICONS[nomePuro] + '" style="display:block;height:36px;width:auto;margin:0 auto 4px;' + iconFilter + '" alt="' + nomePuro + '">'
+          const icon = typeof STESE_ICONS !== 'undefined' && STESE_ICONS[nomeBase]
+            ? '<img src="' + STESE_ICONS[nomeBase] + '" style="display:block;height:36px;width:auto;margin:0 auto 4px;' + iconFilter + '" alt="' + nomeBase + '">'
             : '';
           const tagClass = 'stese-tag' + (isIntegrale ? ' integrale' : '');
           const prezzoHTML = prezzo ? '<span class="tag-price">' + prezzo + '</span>' : '';
@@ -1118,8 +1119,9 @@ function buildMenu() {
                   const match2 = s.match(/^(.*?)\s*(\([+-]?[^)]+€[^)]*\)|[+-][0-9,.€]+|\([0-9,.€]+\))$/);
                   const nomePuro = match2 ? match2[1].trim() : s.trim();
                   const prezzo   = match2 ? match2[2] : '';
-                  const icon     = typeof STESE_ICONS !== 'undefined' && STESE_ICONS[nomePuro]
-                    ? `<img src="${STESE_ICONS[nomePuro]}" style="display:block;height:36px;width:auto;margin:0 auto 4px;" alt="${nomePuro}">`
+                  const nomeBase = nomePuro.split('–')[0].trim();
+                  const icon     = typeof STESE_ICONS !== 'undefined' && STESE_ICONS[nomeBase]
+                    ? `<img src="${STESE_ICONS[nomeBase]}" style="display:block;height:36px;width:auto;margin:0 auto 4px;" alt="${nomeBase}">`
                     : '';
                   return `<span class="stese-tag" style="text-align:center;display:inline-flex;flex-direction:column;align-items:center;padding:8px 12px;">${icon}${nomePuro}${prezzo ? `<span class="tag-price">${prezzo}</span>` : ''}</span>`;
                 }).join('');
