@@ -618,7 +618,7 @@ const MENU_DATA = [
   ["Impasti e Farine","Impasto Classico","Molino Dallagiovanna · Farina Uniqua® · Grano tenero tipo 1 con Germe Vitale 100% Italiano · L'originale dal 1987, in costante miglioramento | Stese disponibili | Tradizionale (sottile) · Baby (-1€) · Baby Tirata · Battuta – Non disponibile il Sabato (+4€)","","",""],
   ["Impasti e Farine","Impasto Alto","Molino Caputo · Farina Super Nuvola® · alta idratazione (60%) · profilo più spesso e soffice | Stese disponibili | Pasta Alta (+1,5€) · Pasta Alta Battuta – Non disponibile il Sabato (+4€)","","",""],
   ["Impasti e Farine","Impasto Integrale","Molino Quaglia · Petra® 9 · Alta idratazione (60%) · alto contenuto di fibre | Stese disponibili | Integrale Tradizionale (sottile) (+1,5€) · Integrale Baby","","",""],
-  ["Impasti e Farine","Senza Glutine","Base artigianale prodotta esternamente · riservata a clientela con allergia/intolleranza al glutine · pizze con ingredienti compatibili segnate con 🌾 · ci impegniamo a mantenere la selezione degli ingredienti compatibili, ma in alcuni momenti potrebbero comunque non essere disponibili","+3,50 €","",""],
+  ["Impasti e Farine","Senza Glutine","Base artigianale prodotta esternamente · riservata a clientela con allergia/intolleranza al glutine · pizze con ingredienti compatibili segnate con GF · ci impegniamo a mantenere la selezione degli ingredienti compatibili, ma in alcuni momenti potrebbero comunque non essere disponibili","+3,50 €","",""],
   ["Pizze in Evidenza","Greenbriè","Mozzarella Km 0 · Crema di Zucchine Km 0 · Spek in cottura · Brié","11.00","","1,7,9,12"],
   ["Pizze in Evidenza","Gustosa","Passata di Datterino Giallo · Mozzarella e Formaggi freschi · Zucchine alla piastra Km 0 · Pancetta Arrotolata Km 0 abbrustolita al forno · Burrata Pugliese a fine cottura","14.00","","1,7"],
   ["Pizze in Evidenza","San Marzano","Pelati San Marzano DOP · Bufala Km 0 Caseificio Scacco · Basilico (Pasta Alta)","11.00","","1,7"],
@@ -1140,7 +1140,7 @@ function buildMenu() {
               <div class="item-price">${formatPrice(item.prezzo)}</div>
               ${calicePrice ? `<span class="wine-calice">al calice ${calicePrice}</span>` : ''}
               ${item.allergeni ? `<span class="allergeni-text">(${item.allergeni})</span>` : ''}
-              ${/\brsg\b/.test(item.badge) ? '<span class="badge badge-rsg" style="font-size:.55rem;padding:1px 4px;margin-top:3px;display:inline-block;line-height:1.4">🌾</span>' : ''}
+              ${/\brsg\b/.test(item.badge) ? '<span class="badge badge-rsg" style="font-size:.55rem;padding:1px 4px;margin-top:3px;display:inline-block;line-height:1.4">GF</span>' : ''}
             </div>
           </div>`;
         }).join('')}
