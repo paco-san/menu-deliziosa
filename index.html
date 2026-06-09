@@ -142,6 +142,7 @@
   .badge-new   { background: #FFF3D0; color: #7A5200; border: 1px solid #D4A840; }
   .badge-spicy { background: #FFEDED; color: #A01010; border: 1px solid #E08080; }
   .badge-veg   { background: #EDFAED; color: #1A6030; border: 1px solid #70B870; }
+  .badge-vegan { background: #D8F5D8; color: #0F4D20; border: 1px solid #4A9E4A; }
   .badge-top   { background: #FFF3D0; color: #7A5200; border: 1px solid #D4A840; }
   .badge-fish    { background: #E8F4FF; color: #1A5C8A; border: 1px solid #80B8E0; }
   .badge-vintage { background: #FDF0D8; color: #7A4A00; border: 1px solid #C8901A; }
@@ -765,7 +766,7 @@ const MENU_DATA = [
   ["Dessert","Millefoglie, Chantilly Italiana, Fragole","","7.00","","1,3,7"],
   */
   ["Dessert","Cheesecake Basque con Coulis di Albicocca Km 0","<strong>in variante, al Caramello Salato</strong> · cremosa cheesecake al forno in stile spagnolo","7.00","","3,7"],
-  ["Dessert","Pavlova alle Ciliegie Km 0 e Sciroppo di Amarena","Meringata composta al momento con meringhe di nostra produzione","7.00","","3,7"],
+  ["Dessert","Pavlova alle Ciliegie Km 0 e Sciroppo di Amarena","Meringata composta al momento con meringhe di nostra produzione · <strong>disponibile anche in variante vegan</strong>","7.00","","3,7"],
   ["Dessert","Zuppa Inglese secondo La Deliziosa","Biscotti secchi · budini · liquore e caffè · dal 1987","6.00","","1,3,6,7,8,12"],
   /* ARCHIVIO VOCI RIMOSSE DAL MENU
   ["Dessert","Tiramisù Classico","Al cucchiaio, in vetro","6.00","","1,3,7"],
@@ -773,18 +774,21 @@ const MENU_DATA = [
   /* ARCHIVIO VOCI RIMOSSE DAL MENU
   */
   ["Dessert","Mascarpone, Brownie, Cremoso alla Gianduja","Nocciole Km 0 · al cucchiaio, in vetro","6.00","","3,7,8"],
+  ["Dessert","Mousse al Pistacchio, Lampone, Biscuit al Cioccolato","","7.00","vegan","1,6,8"],
   /* ARCHIVIO VOCI RIMOSSE DAL MENU
   */
-  ["Dessert","Fragole Fresche","Km 0 · Orto al Chiosco","5.00","veg",""],
+  ["Dessert","Fragole Fresche","Km 0 · Orto al Chiosco","5.00","vegan",""],
   ["Dessert","— GELATI E SORBETTI —","Di nostra produzione · al cucchiaio","","",""],
-  ["Dessert","Gelato al Fiordilatte e Ciliegie Km 0","","6.00","","7"],
+  ["Dessert","Gelato al Fiordilatte e Fragole Km 0","","6.00","","7"],
+  /* ARCHIVIO VOCI RIMOSSE DAL MENU
   ["Dessert","Gelato al Pistacchio","","5.50","","7,8"],
+  */
   ["Dessert","Gelato alla Liquirizia","","5.50","","7"],
   ["Dessert","Gelato alle Arachidi e Caramello Salato","","5.50","","5,7"],
-  ["Dessert","Sorbetto Limone e Salvia","Vegano","4.50","",""],
-  ["Dessert","Sorbetto all'Albicocca","Realizzato con Albicocche Km 0 (Orto al Chiosco) · Vegano","4.50","",""],
-  ["Dessert","Sorbetto alla Pesca e Menta","Realizzato con Pesche Km 0 (Orto al Chiosco) · Vegano","4.50","",""],
-  ["Dessert","Sorbetto Cioccolato e Rum","Vegano","4.50","",""],
+  ["Dessert","Sorbetto Limone e Salvia","","4.50","vegan",""],
+  ["Dessert","Sorbetto all'Albicocca","Realizzato con Albicocche Km 0 (Orto al Chiosco)","4.50","vegan",""],
+  ["Dessert","Sorbetto alla Pesca e Menta","Realizzato con Pesche Km 0 (Orto al Chiosco)","4.50","vegan",""],
+  ["Dessert","Sorbetto Cioccolato e Rum","","4.50","vegan",""],
   ["Dessert","— VINI DA DESSERT AL CALICE —","","","",""],
   ["Dessert","Grecale – Florio","","4.00","",""],
   ["Dessert","Dindarello – Maculan","","5.00","",""],
@@ -894,7 +898,8 @@ function badgeHTML(b) {
   if (t === 'new')   return '<span class="badge badge-new">New</span>';
   if (t === 'top')   return '<span class="badge badge-top">⭐ Top Seller</span>';
   if (t === 'spicy') return '<span class="badge badge-spicy">🌶 Piccante</span>';
-  if (t === 'veg')   return '<span class="badge badge-veg">🌿 Veg</span>';
+  if (t === 'veg')     return '<span class="badge badge-veg">🌿 Veg</span>';
+  if (t === 'vegan')   return '<span class="badge badge-vegan">🌱 Vegan</span>';
   if (t === 'fish')    return '<span class="badge badge-fish">🐟 Pesce</span>';
   if (t === 'vintage') return '<span class="badge badge-vintage">📜 Storica</span>';
   if (t === 'rsg')     return '<span class="badge badge-rsg">RSG</span>';
