@@ -616,8 +616,8 @@ const STESE_ICONS = {
 };
 const MENU_DATA = [
   ["Impasti e Farine","— SCEGLI IL TUO IMPASTO —","","","",""],
-  ["Impasti e Farine","Impasto Classico","Molino Dallagiovanna · Farina Uniqua® · Grano tenero tipo 1 con Germe Vitale 100% Italiano · L'originale dal 1987, in costante miglioramento | Stese disponibili | Tradizionale (sottile) · Baby (-1€) · Baby Tirata · Battuta – Non disponibile il Sabato (+4€)","","",""],
-  ["Impasti e Farine","Impasto Alto","Molino Caputo · Farina Super Nuvola® · alta idratazione (60%) · profilo più spesso e soffice | Stese disponibili | Pasta Alta (+1,5€) · Pasta Alta Battuta – Non disponibile il Sabato (+4€)","","",""],
+  ["Impasti e Farine","Impasto Classico","Molino Dallagiovanna · Farina Uniqua® · Grano tenero tipo 1 con Germe Vitale 100% Italiano · L'originale dal 1987, in costante miglioramento | Stese disponibili | Tradizionale (sottile) · Baby (-1€) · Baby Tirata · Battuta (+4€)","","",""],
+  ["Impasti e Farine","Impasto Alto","Molino Caputo · Farina Super Nuvola® · alta idratazione (60%) · profilo più spesso e soffice | Stese disponibili | Pasta Alta (+1,5€) · Pasta Alta Battuta (+4€)","","",""],
   ["Impasti e Farine","Impasto Integrale","Molino Quaglia · Petra® 9 · Alta idratazione (60%) · alto contenuto di fibre | Stese disponibili | Integrale Tradizionale (sottile) (+1,5€) · Integrale Baby","","",""],
   ["Impasti e Farine","Senza Glutine","Base artigianale prodotta esternamente · riservata a clientela con allergia/intolleranza al glutine · pizze con ingredienti compatibili segnate con GF · ci impegniamo a mantenere la selezione degli ingredienti compatibili, ma in alcuni momenti potrebbero comunque non essere disponibili","+3,50 €","",""],
   ["Pizze in Evidenza","Greenbriè","Mozzarella Km 0 · Crema di Zucchine Km 0 · Spek in cottura · Brié","11.00","","1,7,9,12"],
@@ -755,6 +755,7 @@ const MENU_DATA = [
   ["Bevande","Thè alla Pesca 33cl","","3.00","",""],
   ["Bevande","— VINI ALLA MESCITA —","","","",""],
   ["Dessert","— DOLCI AL PIATTO E AL CUCCHIAIO —","Tutti fatti in casa con passione, da materie prime di qualità<br>Per ogni necessità (senza glutine, senza lattosio/latte, vegan) chiedete allo staff, vi sapremo proporre soluzioni adeguate","","",""],
+  ["Dessert","Mousse al Pistacchio, Lampone, Biscuit al Cioccolato","","7.00","","1,6,8"],
   ["Dessert","Millefoglie, Cremoso alla Vaniglia, Fragole Km 0 (Orto al Chiosco)","","7.00","","1,3,7"],
   /* ARCHIVIO VOCI RIMOSSE DAL MENU
   ["Dessert","Millefoglie, Chantilly Italiana, Fragole","","7.00","","1,3,7"],
@@ -768,7 +769,6 @@ const MENU_DATA = [
   /* ARCHIVIO VOCI RIMOSSE DAL MENU
   */
   ["Dessert","Mascarpone, Brownie, Cremoso alla Gianduja","Nocciole Km 0 · al cucchiaio, in vetro","6.00","","3,7,8"],
-  ["Dessert","Mousse al Pistacchio, Lampone, Biscuit al Cioccolato","","7.00","","1,6,8"],
   /* ARCHIVIO VOCI RIMOSSE DAL MENU
   */
   ["Dessert","Fragole Fresche","Km 0 · Orto al Chiosco","5.00","",""],
@@ -779,7 +779,9 @@ const MENU_DATA = [
   */
   ["Dessert","Gelato alla Liquirizia","","5.50","","7"],
   ["Dessert","Gelato alle Arachidi e Caramello Salato","","5.50","","5,7"],
+  /* ARCHIVIO VOCI RIMOSSE DAL MENU
   ["Dessert","Sorbetto Limone e Salvia","","4.50","",""],
+  */
   ["Dessert","Sorbetto all'Albicocca","Realizzato con Albicocche Km 0 (Orto al Chiosco)","4.50","",""],
   ["Dessert","Sorbetto alla Pesca e Menta","Realizzato con Pesche Km 0 (Orto al Chiosco)","4.50","",""],
   ["Dessert","Sorbetto Cioccolato e Rum","","4.50","",""],
@@ -1044,7 +1046,12 @@ function buildMenu() {
         const parts = item.ingredienti.split('|');
         const desc = parts[0].trim();
         const chipsLabel = parts[1] ? parts[1].trim() : 'Stese disponibili';
-        const stese = parts[2] ? parts[2].trim().split('·').map(sv => sv.trim()).filter(Boolean) : [];
+        const isSabato = new Date().getDay() === 6;
+        const stese = parts[2] ? parts[2].trim().split('·').map(sv => sv.trim()).filter(sv => {
+          if (!sv) return false;
+          if (isSabato && /battuta/i.test(sv)) return false;
+          return true;
+        }) : [];
         const steseHTML = stese.map(sv => {
           const match2 = sv.match(/^(.*?)\s*(\([+-]?[^)]+€[^)]*\)|[+-][0-9,.€]+|\([0-9,.€]+\))$/);
           const nomePuro = match2 ? match2[1].trim() : sv.trim();
