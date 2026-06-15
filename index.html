@@ -1136,14 +1136,14 @@ function setPickerSelection(selected=[], ora=null, oraTo=null) {
       b.tavoli && b.tavoli.includes(t) &&
       timeOverlap(fakeBooking, b)
     ) : null;
-    // In ATT mode: ignore hard conflicts, allow any table
+    // In ATT mode: tutti i tavoli selezionabili, conflitti ignorati
     const hardConflict = !attMode && !!conflictingB && !bookingIsInPast(conflictingB);
     const softConflict = !attMode && !!conflictingB && bookingIsInPast(conflictingB);
     btn.classList.toggle('selected', isSelected);
-    btn.classList.toggle('conflict', hardConflict);
+    btn.classList.toggle('conflict', hardConflict);           // bloccato solo se NON in ATT mode
     btn.classList.toggle('conflict-soft', softConflict);
-    // In ATT mode, highlight occupied tables in gold to show they're being forced
-    btn.classList.toggle('att-override', attMode && !!conflictingB && !isSelected);
+    btn.classList.toggle('att-override', !isSelected && attMode && !!conflictingB);
+    btn.disabled = hardConflict;                              // disabilita fisicamente solo hard conflict non ATT
     btn.title = attMode && conflictingB
       ? `ATT — ${conflictingB.nome||'—'} (${conflictingB.ora})`
       : hardConflict
@@ -1157,8 +1157,10 @@ function setPickerSelection(selected=[], ora=null, oraTo=null) {
 
 function toggleTavoloBtn(btn) {
   const attMode = document.getElementById('f-att-toggle')?.checked;
-  if(!attMode && btn.classList.contains('conflict')) return; // hard conflict: blocked unless ATT
+  if(btn.disabled && !attMode) return; // hard conflict: blocked unless ATT
+  btn.disabled = false;
   btn.classList.toggle('selected');
+  btn.classList.remove('conflict');
   btn.classList.remove('conflict-soft');
   btn.classList.remove('att-override');
   markDirty();
@@ -1821,12 +1823,14 @@ function updateAttSlider() {
   const on = document.getElementById('f-att-toggle').checked;
   document.getElementById('att-slider').style.background = on ? '#C9A84C' : '#c8c0b4';
   // Refresh picker to apply/remove ATT override mode
-  const oraMode = document.getElementById('mode-single').classList.contains('active');
-  const ora = oraMode
-    ? document.getElementById('f-ora').value
-    : document.getElementById('f-ora-from').value;
-  const oraTo = oraMode ? null : document.getElementById('f-ora-to').value;
-  setPickerSelection(getSelectedTavoli(), ora||null, oraTo||null);
+  const isSingle = document.getElementById('mode-single').classList.contains('active');
+  const ora   = isSingle
+    ? document.getElementById('f-ora').value || null
+    : document.getElementById('f-ora-from').value || null;
+  const oraTo = isSingle
+    ? null
+    : document.getElementById('f-ora-to').value || null;
+  setPickerSelection(getSelectedTavoli(), ora, oraTo);
 }
 
 // Toast di conferma salvataggio
