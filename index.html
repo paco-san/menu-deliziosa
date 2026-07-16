@@ -938,11 +938,12 @@ function formatPrice(p) {
   return '€ ' + parseFloat(p).toFixed(2).replace('.', ',');
 }
 
-function buildMenu() {
+function buildMenu(dataOverride) {
+  const data = dataOverride || MENU_DATA;
   const groups = {};
   SECTIONS.forEach(s => groups[s.id] = []);
 
-  MENU_DATA.forEach(row => {
+  data.forEach(row => {
     const key = (row[0] || '').toLowerCase().trim();
     const id = SECTION_MAP[key];
     // Nascondi temporaneamente voci con badge "hide:YYYY-MM-DD" fino alla data indicata
@@ -963,6 +964,8 @@ function buildMenu() {
 
   // Nav — aggiunge data-section a ogni bottone
   const navInner = document.getElementById('navInner');
+  navInner.innerHTML = '';
+  document.getElementById('menuContent').innerHTML = '';
   SECTIONS.forEach(s => {
     if (!groups[s.id].length) return;
     const btn = document.createElement('button');
@@ -1242,7 +1245,26 @@ function goTo(id) {
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - navH - 4, behavior: 'smooth' });
 }
 
+// Mostra subito il menu con dati statici
 buildMenu();
+
+// Poi prova Supabase in background e aggiorna se disponibile
+(async function initMenuSupabase() {
+  const SUPABASE_URL  = 'https://cnvqltudccvzckmbqdkn.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNudnFsdHVkY2N2emNrbWJxZGtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5NzY0NzcsImV4cCI6MjA5OTU1MjQ3N30.ezmrOLBOY0eF63CHPOTDWaNfdyFv9L34VyLw0GRmwgw';
+  try {
+    const res = await fetch(
+      SUPABASE_URL + '/rest/v1/menu_items?attivo=eq.true&order=ordine.asc&select=sezione,nome,ingredienti,prezzo,badge,allergeni',
+      { headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON } }
+    );
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (data && data.length > 0) {
+      const rows = data.map(r => [r.sezione, r.nome, r.ingredienti||'', r.prezzo||'', r.badge||'', r.allergeni||'']);
+      buildMenu(rows);
+    }
+  } catch(e) {}
+})();
 </script>
 <!-- Auto-reload on new deploy -->
 <script>
