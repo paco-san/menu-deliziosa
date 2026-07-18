@@ -1248,11 +1248,12 @@ function goTo(id) {
 // Mostra subito il menu con dati statici
 buildMenu();
 
-// Poi prova Supabase in background e aggiorna se disponibile
-(async function initMenuSupabase() {
+// Supabase Realtime — aggiornamento istantaneo del menu
+(async function initMenuRealtime() {
   const SUPABASE_URL  = 'https://cnvqltudccvzckmbqdkn.supabase.co';
   const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNudnFsdHVkY2N2emNrbWJxZGtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5NzY0NzcsImV4cCI6MjA5OTU1MjQ3N30.ezmrOLBOY0eF63CHPOTDWaNfdyFv9L34VyLw0GRmwgw';
-  try {
+
+  async function fetchMenu() {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/menu_items?attivo=eq.true&order=ordine.asc&select=sezione,nome,ingredienti,prezzo,badge,allergeni',
       { headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON } }
@@ -1260,10 +1261,31 @@ buildMenu();
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data && data.length > 0) {
-      const rows = data.map(r => [r.sezione, r.nome, r.ingredienti||'', r.prezzo||'', r.badge||'', r.allergeni||'']);
-      buildMenu(rows);
+      buildMenu(data.map(r => [r.sezione, r.nome, r.ingredienti||'', r.prezzo||'', r.badge||'', r.allergeni||'']));
     }
-  } catch(e) {}
+  }
+
+  try {
+    // Caricamento iniziale da Supabase
+    await fetchMenu();
+
+    // Connessione Realtime via WebSocket
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    sb.channel('menu_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'menu_items' }, () => {
+        fetchMenu().catch(() => {});
+      })
+      .subscribe();
+    console.log('✅ Realtime attivo');
+  } catch(e) {
+    console.log('ℹ️ Modalità locale:', e.message);
+  }
 })();
 </script>
 <!-- Auto-reload on new deploy -->
