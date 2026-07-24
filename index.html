@@ -147,6 +147,16 @@
   .badge-fish    { background: #E8F4FF; color: #1A5C8A; border: 1px solid #80B8E0; }
   .badge-vintage { background: #FDF0D8; color: #7A4A00; border: 1px solid #C8901A; }
   .badge-rsg     { background: #FFF8DC; color: #7A5800; border: 1px solid #D4A820; font-weight: 700; letter-spacing: .04em; }
+  .beer-family {
+    display: inline-block;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: .52rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 4px; margin-bottom: 4px;
+  }
+  .beer-family-bionda  { background: #FFF3C0; color: #7A5500; border: 1px solid #D4A820; }
+  .beer-family-bianca  { background: #F5F5F0; color: #555545; border: 1px solid #BBBBAA; }
+  .beer-family-rossa   { background: #FDECEA; color: #8B1A1A; border: 1px solid #C0544A; }
+  .beer-family-ipa     { background: #EBF5E0; color: #2D5A1B; border: 1px solid #6A9E45; }
   .item-desc {
     font-size: .78rem; color: var(--ink-soft);
     margin-top: 3px; font-style: italic; line-height: 1.5;
@@ -1154,10 +1164,15 @@ function buildMenu(dataOverride) {
           const isWineCalice = wineParts.length === 2 && /^[\s\d,\.]+€$/.test(wineParts[1].trim());
           const wineDesc = isWineCalice ? wineParts[0].trim() : null;
           const calicePrice = isWineCalice ? wineParts[1].trim() : null;
+          const beerFamily = item.badge.match(/beer:([\w]+)/);
+          const beerFamilyHTML = beerFamily
+            ? `<div><span class="beer-family beer-family-${beerFamily[1]}">${beerFamily[1].toUpperCase()}</span></div>`
+            : '';
           return `
           <div class="menu-item${logo ? ' has-logo' : ''}">
             ${logo}
             <div class="item-info">
+              ${beerFamilyHTML}
               <div class="item-name-row">
                 <span class="item-name">${item.nome}</span>
                 ${badgeHTML(item.badge.replace(/\brsg\b/g, '').trim())}
