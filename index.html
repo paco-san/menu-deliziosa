@@ -1305,6 +1305,8 @@ buildMenu();
   } catch(e) {
     console.log('ℹ️ Modalità locale:', e.message);
   }
+  // Polling di fallback ogni 30s (garantisce aggiornamento anche senza Realtime)
+  setInterval(() => fetchMenu().catch(() => {}), 30000);
 })();
 </script>
 <!-- Auto-reload on new deploy -->
