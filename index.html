@@ -937,7 +937,7 @@ function badgeHTML(b) {
   return b.trim().split(/\s+/).map(t => {
     t = t.toLowerCase().trim();
   if (t === 'new')   return '<span class="badge badge-new">New</span>';
-  if (t === 'top')   return '<span class="badge badge-top">⭐ Top Seller</span>';
+  if (t === 'top' || t.includes('top'))   return '<span class="badge badge-top">⭐ Top Seller</span>';
   if (t === 'spicy') return '<span class="badge badge-spicy">🌶 Piccante</span>';
   if (t === 'veg')     return '<span class="badge badge-veg">🌿 Veg</span>';
   if (t === 'vegan')   return '<span class="badge badge-vegan">🌱 Vegan</span>';
@@ -1035,11 +1035,12 @@ function buildMenu(dataOverride) {
         'Gustosa':     { bg: '#A07800', accent: '#D4A800' },
         'Marchigiana': { bg: '#2C2416', accent: '#7A6040' },
         'Ficus':       { bg: '#4A2570', accent: '#9B59C4' },
+        'Hokkaido':    { bg: '#B04A00', accent: '#E8821A' },
       };
       const cards = list.filter(i => !i.nome.startsWith('—')).map(item => {
         const col = EVIDENZA_COLORS[item.nome] || { bg: '#5C3520', accent: '#A06030' };
         const badges = [
-          item.badge ? `<span class="evidenza-badge">${item.badge === 'top' ? '⭐ Top Seller' : item.badge === 'new' ? 'New' : item.badge}</span>` : '',
+          item.badge ? `<span class="evidenza-badge">${item.badge.includes('top') ? '⭐ Top Seller' : item.badge.includes('new') ? 'New' : item.badge}</span>` : '',
           item.allergeni ? `<span class="evidenza-allerg">(${item.allergeni})</span>` : '',
         ].join('');
         return `<div class="evidenza-card" style="background:linear-gradient(135deg,${col.bg} 0%,${col.accent} 100%)">
