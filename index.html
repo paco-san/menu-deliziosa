@@ -972,7 +972,7 @@ function buildMenu(dataOverride) {
       if (today < hideUntil) return;
       row[4] = row[4].replace(/hide:\d{4}-\d{2}-\d{2}/, '').trim();
     }
-    if (id) groups[id].push({ nome: row[1], ingredienti: row[2], prezzo: row[3], badge: row[4], allergeni: row[5] || '' });
+    if (id) groups[id].push({ nome: row[1], ingredienti: row[2], prezzo: row[3], badge: row[4], allergeni: row[5] || '', colore: row[6] || '' });
   });
   ALLERGENI_DATA.forEach(row => {
     if (!groups['allergeni']) groups['allergeni'] = [];
@@ -1038,7 +1038,13 @@ function buildMenu(dataOverride) {
         'Hokkaido':    { bg: '#B04A00', accent: '#E8821A' },
       };
       const cards = list.filter(i => !i.nome.startsWith('—')).map(item => {
-        const col = EVIDENZA_COLORS[item.nome] || { bg: '#5C3520', accent: '#A06030' };
+        const col = (() => {
+          if (item.colore && item.colore.includes(',')) {
+            const [bg, accent] = item.colore.split(',');
+            return { bg: bg.trim(), accent: accent.trim() };
+          }
+          return EVIDENZA_COLORS[item.nome] || { bg: '#5C3520', accent: '#A06030' };
+        })();
         const badges = [
           item.badge ? `<span class="evidenza-badge">${item.badge.includes('top') ? '⭐ Top Seller' : item.badge.includes('new') ? 'New' : item.badge}</span>` : '',
           item.allergeni ? `<span class="evidenza-allerg">(${item.allergeni})</span>` : '',
@@ -1279,13 +1285,13 @@ buildMenu();
 
   async function fetchMenu() {
     const res = await fetch(
-      SUPABASE_URL + '/rest/v1/menu_items?attivo=eq.true&order=ordine.asc&select=sezione,nome,ingredienti,prezzo,badge,allergeni',
+      SUPABASE_URL + '/rest/v1/menu_items?attivo=eq.true&order=ordine.asc&select=sezione,nome,ingredienti,prezzo,badge,allergeni,colore',
       { headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON } }
     );
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data && data.length > 0) {
-      buildMenu(data.map(r => [r.sezione, r.nome, r.ingredienti||'', r.prezzo||'', r.badge||'', r.allergeni||'']));
+      buildMenu(data.map(r => [r.sezione, r.nome, r.ingredienti||'', r.prezzo||'', r.badge||'', r.allergeni||'', r.colore||'']));
     }
   }
 
