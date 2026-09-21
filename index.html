@@ -504,26 +504,6 @@
     border-top: 1.5px solid var(--orange-line);
     border-bottom: 1.5px solid var(--orange-line);
   }
-  .goog-te-banner-frame, .goog-te-banner, iframe.goog-te-banner-frame { 
-    display: none !important; 
-    visibility: hidden !important;
-    height: 0 !important;
-  }
-  html { top: 0 !important; }
-  body { top: 0 !important; position: static !important; }
-  .skiptranslate { display: none !important; }
-  #google_translate_element select {
-    background: rgba(255,255,255,.15);
-    color: #fff;
-    border: 1px solid rgba(255,255,255,.3);
-    border-radius: 8px;
-    padding: 4px 8px;
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: .75rem;
-    cursor: pointer;
-  }
-  .goog-te-gadget { color: transparent !important; font-size: 0 !important; }
-  .goog-te-gadget .goog-te-combo { color: #fff; font-size: .75rem; }
 </style>
 </head>
 <body>
@@ -568,9 +548,8 @@
       <span>Traduci</span>
     </div>
   </div>
-  <div id="translateBox" style="display:none; margin-top:10px;">
-    <div id="google_translate_element"></div>
-  </div><br>
+  <div id="translateBox" style="display:none; margin-top:12px; flex-wrap:wrap; gap:7px; justify-content:center; max-width:300px; margin-left:auto; margin-right:auto;"></div>
+  <br>
   <span style="opacity:.4;font-size:.6rem">v.27</span>
 </footer>
 
@@ -1397,34 +1376,42 @@ buildMenu();
   };
 })();
 </script>
-<!-- Google Translate -->
+<!-- Traduzione: link diretti a Google Translate (compatibile con Safari/webview, niente iframe) -->
 <script>
-function googleTranslateElementInit() {
-  new google.translate.TranslateElement({
-    pageLanguage: 'it',
-    includedLanguages: 'en,de,fr,es,zh-CN,ja,ar,ru,pt,nl',
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-    autoDisplay: false
-  }, 'google_translate_element');
-}
-</script>
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script>
-document.getElementById('translateToggle').addEventListener('click', function() {
+(function() {
+  const LANGS = [
+    { code: 'en', label: 'EN' },
+    { code: 'de', label: 'DE' },
+    { code: 'fr', label: 'FR' },
+    { code: 'es', label: 'ES' },
+    { code: 'zh-CN', label: '中文' },
+    { code: 'ja', label: '日本語' },
+  ];
   const box = document.getElementById('translateBox');
-  const visible = box.style.display !== 'none';
-  box.style.display = visible ? 'none' : 'block';
-});
-// Google Translate reimposta periodicamente top:40px su html/body per mostrare la sua barra.
-// La forziamo a 0 ogni 300ms per tenere la nav sempre visibile.
-setInterval(function() {
-  if (document.body.style.top && document.body.style.top !== '0px') {
-    document.body.style.top = '0px';
+  const pageUrl = location.href.split('#')[0].split('?')[0];
+
+  // Se stiamo arrivando da una traduzione, mostra un pulsante per tornare in italiano
+  const params = new URLSearchParams(location.search);
+  if (params.get('lang')) {
+    const backBtn = document.createElement('div');
+    backBtn.style.cssText = 'position:fixed;top:8px;right:8px;z-index:9999;';
+    backBtn.innerHTML = '<a href="' + pageUrl + '" style="display:inline-block;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:20px;font-family:sans-serif;font-size:.75rem;text-decoration:none;">🇮🇹 Italiano</a>';
+    document.body.appendChild(backBtn);
   }
-  if (document.documentElement.style.top && document.documentElement.style.top !== '0px') {
-    document.documentElement.style.top = '0px';
-  }
-}, 300);
+
+  LANGS.forEach(l => {
+    const a = document.createElement('a');
+    // Naviga nella stessa scheda (compatibile con app kiosk che bloccano target=_blank)
+    a.href = 'https://translate.google.com/translate?sl=it&tl=' + l.code + '&u=' + encodeURIComponent(pageUrl + '?lang=' + l.code);
+    a.textContent = l.label;
+    a.className = 'font-btn';
+    a.style.cssText = 'width:auto;height:auto;padding:6px 12px;border-radius:20px;font-size:.7rem;text-decoration:none;';
+    box.appendChild(a);
+  });
+  document.getElementById('translateToggle').addEventListener('click', function() {
+    box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
+  });
+})();
 </script>
 </body>
 </html>
