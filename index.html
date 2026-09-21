@@ -504,8 +504,14 @@
     border-top: 1.5px solid var(--orange-line);
     border-bottom: 1.5px solid var(--orange-line);
   }
-  .goog-te-banner-frame, .goog-te-banner { display: none !important; }
-  body { top: 0 !important; }
+  .goog-te-banner-frame, .goog-te-banner, iframe.goog-te-banner-frame { 
+    display: none !important; 
+    visibility: hidden !important;
+    height: 0 !important;
+  }
+  html { top: 0 !important; }
+  body { top: 0 !important; position: static !important; }
+  .skiptranslate { display: none !important; }
   #google_translate_element select {
     background: rgba(255,255,255,.15);
     color: #fff;
@@ -1409,6 +1415,16 @@ document.getElementById('translateToggle').addEventListener('click', function() 
   const visible = box.style.display !== 'none';
   box.style.display = visible ? 'none' : 'block';
 });
+// Google Translate reimposta periodicamente top:40px su html/body per mostrare la sua barra.
+// La forziamo a 0 ogni 300ms per tenere la nav sempre visibile.
+setInterval(function() {
+  if (document.body.style.top && document.body.style.top !== '0px') {
+    document.body.style.top = '0px';
+  }
+  if (document.documentElement.style.top && document.documentElement.style.top !== '0px') {
+    document.documentElement.style.top = '0px';
+  }
+}, 300);
 </script>
 </body>
 </html>
