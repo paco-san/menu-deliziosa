@@ -17,6 +17,8 @@
     --ink:           #1A1A1A;
     --ink-soft:      #6A6A6A;
     --nav-h:         52px;
+    --subsection-title-size:     .85rem;
+    --subsection-title-sub-size: .75rem;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -171,7 +173,7 @@
   /* SOTTOSEZIONI (es. Bevande) */
   .subsection-title {
     font-family: 'Josefin Sans', sans-serif;
-    font-size: .66rem; font-weight: 700;
+    font-size: var(--subsection-title-size); font-weight: 700;
     letter-spacing: .16em; text-transform: uppercase;
     color: var(--orange-dark);
     background: var(--orange-soft);
@@ -182,7 +184,7 @@
     flex-wrap: wrap;
   }
   .subsection-title span {
-    font-size: .65rem; color: var(--ink-soft);
+    font-size: var(--subsection-title-sub-size); color: var(--ink-soft);
     text-transform: none; letter-spacing: .04em; font-weight: 400;
   }
 
@@ -1280,9 +1282,25 @@ buildMenu();
     }
   }
 
+  // Impostazioni di stile modificabili da Supabase (es. dimensione titoli sottosezione)
+  async function fetchSiteSettings() {
+    const res = await fetch(
+      SUPABASE_URL + '/rest/v1/site_settings?select=key,value',
+      { headers: { 'apikey': SUPABASE_ANON, 'Authorization': 'Bearer ' + SUPABASE_ANON } }
+    );
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const root = document.documentElement.style;
+    (data || []).forEach(row => {
+      if (row.key === 'subsection_title_size') root.setProperty('--subsection-title-size', row.value);
+      if (row.key === 'subsection_title_sub_size') root.setProperty('--subsection-title-sub-size', row.value);
+    });
+  }
+
   try {
     // Caricamento iniziale da Supabase
     await fetchMenu();
+    fetchSiteSettings().catch(() => {});
 
     // Connessione Realtime via WebSocket
     await new Promise((resolve, reject) => {
@@ -1297,12 +1315,20 @@ buildMenu();
         fetchMenu().catch(() => {});
       })
       .subscribe();
+    sb.channel('settings_realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, () => {
+        fetchSiteSettings().catch(() => {});
+      })
+      .subscribe();
     console.log('✅ Realtime attivo');
   } catch(e) {
     console.log('ℹ️ Modalità locale:', e.message);
   }
   // Polling di fallback ogni 30s (garantisce aggiornamento anche senza Realtime)
-  setInterval(() => fetchMenu().catch(() => {}), 30000);
+  setInterval(() => {
+    fetchMenu().catch(() => {});
+    fetchSiteSettings().catch(() => {});
+  }, 30000);
 })();
 </script>
 <!-- Auto-reload on new deploy -->
