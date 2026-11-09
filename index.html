@@ -1403,7 +1403,7 @@ buildMenu();
   };
 })();
 </script>
-<!-- Traduzione: link diretti a Google Translate (compatibile con Safari/webview, niente iframe) -->
+<!-- Traduzione: proxy translate.goog di Google (link diretti, stessa scheda, niente iframe) -->
 <script>
 (function() {
   const LANGS = [
@@ -1415,21 +1415,29 @@ buildMenu();
     { code: 'ja', label: '日本語' },
   ];
   const box = document.getElementById('translateBox');
-  const pageUrl = location.href.split('#')[0].split('?')[0];
+  const TG = '.translate.goog';
+  const onProxy = location.hostname.endsWith(TG);
 
-  // Se stiamo arrivando da una traduzione, mostra un pulsante per tornare in italiano
-  const params = new URLSearchParams(location.search);
-  if (params.get('lang')) {
+  // host originale (se siamo già dentro il proxy di Google, lo ricostruiamo)
+  const origHost = onProxy
+    ? location.hostname.slice(0, -TG.length).replace(/--/g, '\u0000').replace(/-/g, '.').replace(/\u0000/g, '-')
+    : location.hostname;
+  const origUrl = 'https://' + origHost + '/';
+  // host proxy: '.' -> '-', '-' -> '--'
+  const proxyHost = origHost.replace(/-/g, '--').replace(/\./g, '-') + TG;
+
+  // Se stiamo vedendo la versione tradotta, mostra un pulsante per tornare in italiano
+  if (onProxy) {
     const backBtn = document.createElement('div');
     backBtn.style.cssText = 'position:fixed;top:8px;right:8px;z-index:9999;';
-    backBtn.innerHTML = '<a href="' + pageUrl + '" style="display:inline-block;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:20px;font-family:sans-serif;font-size:.75rem;text-decoration:none;">🇮🇹 Italiano</a>';
+    backBtn.innerHTML = '<a href="' + origUrl + '" target="_top" style="display:inline-block;background:rgba(0,0,0,.6);color:#fff;padding:8px 14px;border-radius:20px;font-family:sans-serif;font-size:.75rem;text-decoration:none;">🇮🇹 Italiano</a>';
     document.body.appendChild(backBtn);
   }
 
   LANGS.forEach(l => {
     const a = document.createElement('a');
     // Naviga nella stessa scheda (compatibile con app kiosk che bloccano target=_blank)
-    a.href = 'https://translate.google.com/translate?sl=it&tl=' + l.code + '&u=' + encodeURIComponent(pageUrl + '?lang=' + l.code);
+    a.href = 'https://' + proxyHost + '/?_x_tr_sl=it&_x_tr_tl=' + l.code + '&_x_tr_hl=it&_x_tr_pto=wapp';
     a.textContent = l.label;
     a.className = 'font-btn';
     a.style.cssText = 'width:auto;height:auto;padding:6px 12px;border-radius:20px;font-size:.7rem;text-decoration:none;';
