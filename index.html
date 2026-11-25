@@ -1007,11 +1007,11 @@ function buildMenu(dataOverride) {
           <div class="divider-line"><span>✦</span></div>
         </div>
         <div class="staff-grid">
-          <div class="staff-card"><div class="staff-role">🍸 Banco</div><div class="staff-names">Antonella e Monica</div></div>
-          <div class="staff-card"><div class="staff-role">🍽️ Sala</div><div class="staff-names">Francesco, Lorenza e Stefano</div></div>
-          <div class="staff-card"><div class="staff-role">🔥 Forno</div><div class="staff-names">Luca e Maura</div></div>
-          <div class="staff-card"><div class="staff-role">👨‍🍳 Cucina</div><div class="staff-names">Novella</div></div>
-          <div class="staff-card"><div class="staff-role">✨ Servizi</div><div class="staff-names">Roberta</div></div>
+          <div class="staff-card"><div class="staff-role">🍸 Banco</div><div class="staff-names" data-staff="staff_banco">Antonella e Monica</div></div>
+          <div class="staff-card"><div class="staff-role">🍽️ Sala</div><div class="staff-names" data-staff="staff_sala">Francesco, Emma e Stefano</div></div>
+          <div class="staff-card"><div class="staff-role">🔥 Forno</div><div class="staff-names" data-staff="staff_forno">Luca e Maura</div></div>
+          <div class="staff-card"><div class="staff-role">👨‍🍳 Cucina</div><div class="staff-names" data-staff="staff_cucina">Novella</div></div>
+          <div class="staff-card"><div class="staff-role">✨ Servizi</div><div class="staff-names" data-staff="staff_servizi">Roberta</div></div>
         </div>`;
       main.appendChild(sec);
       return;
@@ -1280,10 +1280,20 @@ buildMenu();
     const data = await res.json();
     if (data && data.length > 0) {
       buildMenu(data.map(r => [r.sezione, r.nome, r.ingredienti||'', r.prezzo||'', r.badge||'', r.allergeni||'', r.colore||'']));
+      applyStaff();
     }
   }
 
   // Impostazioni di stile modificabili da Supabase (es. dimensione titoli sottosezione)
+  // Nomi dello staff modificabili da Supabase (site_settings: staff_banco, staff_sala, staff_forno, staff_cucina, staff_servizi)
+  const staffValues = {};
+  function applyStaff() {
+    document.querySelectorAll('[data-staff]').forEach(el => {
+      const v = staffValues[el.dataset.staff];
+      if (v && el.textContent !== v) el.textContent = v;
+    });
+  }
+
   async function fetchSiteSettings() {
     const res = await fetch(
       SUPABASE_URL + '/rest/v1/site_settings?select=key,value',
@@ -1295,7 +1305,9 @@ buildMenu();
     (data || []).forEach(row => {
       if (row.key === 'subsection_title_size') root.setProperty('--subsection-title-size', row.value);
       if (row.key === 'subsection_title_sub_size') root.setProperty('--subsection-title-sub-size', row.value);
+      if (row.key.startsWith('staff_')) staffValues[row.key] = row.value;
     });
+    applyStaff();
   }
 
   try {
